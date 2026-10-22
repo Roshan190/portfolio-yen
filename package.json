@@ -1,0 +1,34 @@
+{
+  "name": "portfolio-yen",
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Roshan Shikhare",
+  "description": "Roshan Shikhare — a scroll-driven portfolio adapted from David Yen's MIT-licensed poster site.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "typecheck": "tsc --noEmit",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Roshan190/portfolio-yen.git"
+  },
+  "homepage": "https://roshan190.github.io/portfolio-yen/",
+  "dependencies": {
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.27",
+    "next": "^16.4.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2"
+  }
+}
