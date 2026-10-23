@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 
-const SCRUB = 0.45
+const SCRUB = 0.6
 
 export function Motion() {
   useEffect(() => {
@@ -121,20 +121,19 @@ export function Motion() {
 
         const ctx = gsap.context(() => {
           const parallax = (tl: gsap.core.Timeline, stage: Element, span: number, from0 = false) => {
-            const amp = () => (narrow() ? (from0 ? 0.1 : 0.08) : from0 ? 0.3 : 0.22)
-            const swing = from0 ? 10 : 8
+            const amp = () => (narrow() ? 0.1 : 0.3)
             stage.querySelectorAll<HTMLElement>('.prop').forEach((prop) => {
               const depth = Number(prop.dataset.depth) || 0.4
               const rot = Number(prop.dataset.rot) || 0
               tl.fromTo(
                 prop,
-                { y: () => (from0 ? 0 : H() * amp() * depth), rotation: from0 ? rot : rot - swing * depth },
-                { y: () => -H() * (from0 ? 0.55 : amp()) * depth, rotation: rot + swing * depth, duration: span, ease: 'none' },
+                { y: () => (from0 ? 0 : H() * amp() * depth), rotation: from0 ? rot : rot - 10 * depth },
+                { y: () => -H() * (from0 ? 0.55 : amp()) * depth, rotation: rot + 10 * depth, duration: span, ease: 'none' },
                 0,
               )
             })
             const pattern = stage.querySelector('.pattern')
-            if (pattern) tl.fromTo(pattern, { yPercent: 6 }, { yPercent: -6, duration: span, ease: 'none' }, 0)
+            if (pattern) tl.fromTo(pattern, { yPercent: 7 }, { yPercent: -7, duration: span, ease: 'none' }, 0)
           }
 
           const hero = main.querySelector<HTMLElement>('.hero')
@@ -214,13 +213,24 @@ export function Motion() {
             if (tapes.length) tl.fromTo(tapes, { xPercent: 0 }, { xPercent: -50, duration: 3 }, 0)
             tl.from(
               section.querySelectorAll('.prop__in'),
-              { scale: 0.55, opacity: 0, duration: 0.45, stagger: 0.06, ease: 'power2.out' },
+              {
+                scale: 0.2,
+                opacity: 0,
+                rotation: (i: number) => (i % 2 ? 45 : -45),
+                duration: 0.55,
+                stagger: 0.08,
+                ease: 'back.out(1.5)',
+              },
               0.28,
             )
-            tl.from(section.querySelectorAll('.co__name .char'), { yPercent: 110, duration: 0.42, stagger: 0.02, ease: 'power3.out' }, 0.34)
-            tl.from(section.querySelectorAll('.co__meta > *'), { y: 12, opacity: 0, duration: 0.28, stagger: 0.04 }, 0.46)
-            const line = section.querySelector('.co__line')
-            if (line) tl.from(line, { y: 14, opacity: 0, duration: 0.3 }, 0.55)
+            tl.from(
+              section.querySelectorAll('.co__name .char'),
+              { yPercent: 115, rotation: 9, duration: 0.45, stagger: 0.03, ease: 'power3.out' },
+              0.36,
+            )
+            tl.from(section.querySelectorAll('.co__meta > *'), { y: 18, opacity: 0, duration: 0.3, stagger: 0.05, ease: 'power2.out' }, 0.44)
+            const words = section.querySelectorAll('.co__line .w')
+            if (words.length) tl.from(words, { opacity: 0.1, y: 10, duration: 0.3, stagger: 0.01, ease: 'power1.out' }, 0.56)
             section.querySelectorAll('.stat').forEach((stat, i) => {
               const at = 0.66 + i * 0.08
               tl.from(stat, { y: 20, opacity: 0, duration: 0.28 }, at)
@@ -247,8 +257,23 @@ export function Motion() {
 
             gsap
               .timeline({ scrollTrigger: { trigger: projects, start: 'top bottom', end: 'top top', scrub: SCRUB } })
-              .from('.projects__title span', { yPercent: 40, opacity: 0, stagger: 0.08, duration: 0.45, ease: 'power3.out' }, 0.35)
-              .from('.projects__lede, .projects__links, .projects__note', { y: 20, opacity: 0, stagger: 0.05, duration: 0.35 }, 0.45)
+              .from('.projects__title span', { yPercent: 60, opacity: 0, stagger: 0.1, ease: 'power3.out', duration: 0.5 }, 0.45)
+              .from('.projects__lede, .projects__links, .projects__note', { y: 30, opacity: 0, stagger: 0.06, ease: 'power2.out', duration: 0.4 }, 0.55)
+
+            const pattern = stage?.querySelector('.pattern')
+            if (pattern) {
+              gsap.to(pattern, {
+                xPercent: -8,
+                ease: 'none',
+                scrollTrigger: {
+                  trigger: projects,
+                  start: 'top top',
+                  end: () => `+=${dist()}`,
+                  scrub: SCRUB,
+                  invalidateOnRefresh: true,
+                },
+              })
+            }
 
             const slide = gsap.to(track, {
               x: () => -dist(),
@@ -272,22 +297,35 @@ export function Motion() {
               const tilt = Number(card.dataset.tilt) || 1
               gsap.fromTo(
                 card,
-                { rotation: tilt * 5, y: 48 },
+                { rotation: tilt * 7, y: 70 },
                 {
-                  rotation: tilt * 1.2,
+                  rotation: tilt * 1.5,
                   y: 0,
                   ease: 'power1.out',
-                  scrollTrigger: { trigger: card, containerAnimation: slide, start: 'left 90%', end: 'center 60%', scrub: SCRUB },
+                  scrollTrigger: { trigger: card, containerAnimation: slide, start: 'left right', end: 'center 60%', scrub: SCRUB },
                 },
               )
+              const art = card.querySelector('.card__art img')
+              if (art) {
+                gsap.fromTo(
+                  art,
+                  { xPercent: 12, rotation: tilt * 10 },
+                  {
+                    xPercent: -12,
+                    rotation: -tilt * 6,
+                    ease: 'none',
+                    scrollTrigger: { trigger: card, containerAnimation: slide, start: 'left right', end: 'right left', scrub: SCRUB },
+                  },
+                )
+              }
             })
           }
 
           if (end) {
-            const tl = gsap.timeline({ scrollTrigger: { trigger: end, start: 'top bottom', end: 'top 40%', scrub: SCRUB } })
+            const tl = gsap.timeline({ scrollTrigger: { trigger: end, start: 'top bottom', end: 'top top', scrub: SCRUB } })
             tl.fromTo(end, { '--r': '40px' }, { '--r': '0px', ease: 'none', duration: 1 }, 0)
-            tl.from('.end__title span', { yPercent: 30, opacity: 0, stagger: 0.06, duration: 0.4, ease: 'power3.out' }, 0.25)
-            tl.from('.end__lede, .end__actions', { y: 18, opacity: 0, stagger: 0.05, duration: 0.3 }, 0.35)
+            tl.from('.end__title .char', { yPercent: 110, rotation: 8, stagger: 0.02, duration: 0.4, ease: 'power3.out' }, 0.45)
+            tl.from(['.end__inner > .eyebrow', '.end__lede', '.end__actions'], { y: 30, opacity: 0, stagger: 0.05, duration: 0.3, ease: 'power2.out' }, 0.55)
           }
 
           if (window.matchMedia('(pointer: fine)').matches) {
@@ -305,14 +343,14 @@ export function Motion() {
                   const inner = prop.querySelector('.prop__in')
                   if (!inner) return
                   mover = {
-                    x: gsap.quickTo(inner, 'x', { duration: 0.8, ease: 'power3.out' }),
-                    y: gsap.quickTo(inner, 'y', { duration: 0.8, ease: 'power3.out' }),
+                    x: gsap.quickTo(inner, 'x', { duration: 0.9, ease: 'power3.out' }),
+                    y: gsap.quickTo(inner, 'y', { duration: 0.9, ease: 'power3.out' }),
                     d: Number(prop.dataset.depth) || 0.4,
                   }
                   movers.set(prop, mover)
                 }
-                mover.x(-nx * 36 * mover.d)
-                mover.y(-ny * 24 * mover.d)
+                mover.x(-nx * 60 * mover.d)
+                mover.y(-ny * 44 * mover.d)
               })
             }
             window.addEventListener('pointermove', onMove, { passive: true })
@@ -324,10 +362,10 @@ export function Motion() {
           .then(({ default: Lenis }) => {
             if (dead || cancelled) return
             const instance = new Lenis({
-              lerp: 0.12,
+              lerp: 0.09,
               smoothWheel: true,
               syncTouch: false,
-              wheelMultiplier: 1,
+              wheelMultiplier: 0.95,
               touchMultiplier: 1,
               autoRaf: false,
               anchors: { duration: 1, lock: false },
@@ -377,39 +415,24 @@ export function Motion() {
       if (started || cancelled) return
       started = true
       window.clearTimeout(timer)
-      window.removeEventListener('pointerdown', start)
-      window.removeEventListener('keydown', start)
-      window.removeEventListener('wheel', start)
-      window.removeEventListener('touchstart', start)
-      window.removeEventListener('scroll', onScroll)
+      if (idle) window.cancelIdleCallback?.(idle)
       void boot().catch(() => {
         /* Leave the page on native scrolling. */
       })
     }
 
-    const onScroll = () => {
-      if (window.scrollY > 8) start()
-    }
-
     paintHud()
     window.addEventListener('scroll', paintHud, { passive: true })
-    window.addEventListener('pointerdown', start, { passive: true })
-    window.addEventListener('keydown', start)
-    window.addEventListener('wheel', start, { passive: true })
-    window.addEventListener('touchstart', start, { passive: true })
-    window.addEventListener('scroll', onScroll, { passive: true })
-    // Fallback for a visitor who never scrolls. Long enough that it stays
-    // outside the initial load, so the hero can paint first.
-    timer = window.setTimeout(start, 12000)
+    // After the first paint, not on the first input. Idle yields to the hero,
+    // and the timeout covers browsers without requestIdleCallback.
+    const win = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }
+    const idle = win.requestIdleCallback?.(() => start(), { timeout: 450 })
+    timer = window.setTimeout(start, 500)
 
     return () => {
       cancelled = true
       window.clearTimeout(timer)
-      window.removeEventListener('pointerdown', start)
-      window.removeEventListener('keydown', start)
-      window.removeEventListener('wheel', start)
-      window.removeEventListener('touchstart', start)
-      window.removeEventListener('scroll', onScroll)
+      if (idle) window.cancelIdleCallback?.(idle)
       window.removeEventListener('scroll', paintHud)
       restore?.()
     }

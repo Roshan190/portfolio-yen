@@ -28,6 +28,7 @@ export interface Stat {
 
 export interface ToyProp {
   toy: string
+  img: string
   x: number
   y: number
   w: number
@@ -36,11 +37,6 @@ export interface ToyProp {
   mw?: number
   mx?: number
   my?: number
-  /** Original template artwork, when this toy is a photo rather than an SVG. */
-  img?: string
-  imgW?: number
-  imgH?: number
-  imgSmW?: number
 }
 
 export interface Job {
@@ -56,7 +52,7 @@ export interface Job {
   where: string
   year: number
   theme: Theme
-  pattern: 'dots' | 'grid' | 'stripes' | 'rings' | 'lines'
+  pattern: 'dots' | 'grid' | 'stripes' | 'rings' | 'lines' | 'spot'
   line: string
   stats: Stat[]
   foot?: string
@@ -75,14 +71,14 @@ export const JOBS: Job[] = [
     where: 'IT, MarTech & GenAI',
     year: 2026,
     theme: {
-      bg: '#E7EEFF',
-      ink: '#0C1B3A',
-      accent: '#F0B429',
-      soft: '#D5E2FF',
-      name: '#0C1B3A',
-      star: '#F0B429',
+      bg: '#00031F',
+      ink: '#D1DEF2',
+      accent: '#0B5CFF',
+      soft: '#00053D',
+      name: '#0B5CFF',
+      star: '#7CE0FF',
     },
-    pattern: 'rings',
+    pattern: 'spot',
     line: 'Building web experiences for Bajaj Finserv’s IT, MarTech & GenAI technology team.',
     stats: [
       { text: 'MarTech', label: 'IT, MarTech & GenAI' },
@@ -91,10 +87,10 @@ export const JOBS: Job[] = [
     ],
     tape: ['Bajaj Finserv', 'Senior Software Engineer', 'IT', 'MarTech', 'GenAI', 'Technology', 'Web experiences', 'Apr 2026'],
     props: [
-      { toy: 'window', x: 80, y: 38, w: 22, mw: 42, depth: 0.75, rot: -8 },
-      { toy: 'spark', x: 92, y: 74, w: 13, mw: 24, depth: 1, rot: 12 },
-      { toy: 'card', x: 78, y: 84, w: 16, mw: 30, depth: 0.55, rot: 6 },
-      { toy: 'megaphone', x: 76, y: 18, w: 12, mw: 22, depth: 0.32, rot: -14 },
+      { toy: 'camera', img: 'zoom-camera', x: 80, y: 40, w: 21, depth: 0.8, rot: -6 },
+      { toy: 'tiles', img: 'zoom-tiles', x: 63, y: 84, w: 18, depth: 0.6, rot: 5 },
+      { toy: 'mic', img: 'zoom-mic', x: 92, y: 80, w: 11, depth: 1, rot: 10 },
+      { toy: 'folder', img: 'zoom-folder', x: 57, y: 22, w: 11, depth: 0.35, rot: -10 },
     ],
   },
   {
@@ -108,12 +104,12 @@ export const JOBS: Job[] = [
     where: 'Mumbai',
     year: 2023,
     theme: {
-      bg: '#FFE14A',
-      ink: '#141414',
-      accent: '#FF4A1C',
-      soft: '#FFF3A8',
-      name: '#141414',
-      star: '#FFE14A',
+      bg: '#FD243E',
+      ink: '#111013',
+      accent: '#111013',
+      soft: '#FF6B7D',
+      name: '#111013',
+      star: '#FFD23F',
     },
     pattern: 'stripes',
     line: 'React, Next.js, Angular and AEM. Configurable insurance journeys, KYC prefill, CMS-driven platforms and integrated backend services.',
@@ -125,10 +121,10 @@ export const JOBS: Job[] = [
     foot: 'Clients: IFB, India First Life Insurance and Palfinger.',
     tape: ['DEPT', 'React', 'Next.js', 'Angular', 'AEM', 'Insurance journeys', 'KYC prefill', 'CMS', 'IFB', 'India First Life', 'Palfinger'],
     props: [
-      { toy: 'stack', x: 78, y: 40, w: 22, depth: 0.72, rot: -6 },
-      { toy: 'badge', x: 92, y: 76, w: 14, depth: 1, rot: 10 },
-      { toy: 'path', x: 78, y: 86, w: 16, depth: 0.5, rot: -8 },
-      { toy: 'plug', x: 76, y: 16, w: 11, depth: 0.3, rot: 16 },
+      { toy: 'cursor', img: 'tf-cursor', x: 83, y: 40, w: 17, mw: 30, mx: 84, my: 20, depth: 0.9, rot: -8 },
+      { toy: 'clamp', img: 'tf-clamp', x: 64, y: 84, w: 19, mw: 34, mx: 22, my: 91, depth: 0.6, rot: 6 },
+      { toy: 'canvas', img: 'tf-canvas', x: 91, y: 80, w: 16, mw: 28, mx: 86, my: 89, depth: 1, rot: 10 },
+      { toy: 'rosette', img: 'tf-rosette', x: 57, y: 22, w: 11, mw: 20, mx: 50, my: 7, depth: 0.35, rot: -12 },
     ],
   },
   {
@@ -141,14 +137,14 @@ export const JOBS: Job[] = [
     where: 'Mumbai',
     year: 2021,
     theme: {
-      bg: '#D9F6EF',
-      ink: '#062E2A',
-      accent: '#0E8F7E',
-      soft: '#B7EBE2',
-      name: '#062E2A',
-      star: '#D9F6EF',
+      bg: '#3DDC84',
+      ink: '#073B2A',
+      accent: '#073B2A',
+      soft: '#9CF0C0',
+      name: '#073B2A',
+      star: '#073B2A',
     },
-    pattern: 'lines',
+    pattern: 'dots',
     line: 'Software engineer at Tekno Point in Mumbai, from July 2021 to July 2023.',
     stats: [
       { text: 'Engineer', label: 'Software Engineer' },
@@ -157,18 +153,18 @@ export const JOBS: Job[] = [
     ],
     tape: ['Tekno Point', 'Software Engineer', 'Mumbai', 'July 2021', 'July 2023'],
     props: [
-      { toy: 'terminal', x: 80, y: 40, w: 22, depth: 0.75, rot: -8 },
-      { toy: 'gear', x: 92, y: 78, w: 13, depth: 1, rot: 14 },
-      { toy: 'brackets', x: 78, y: 86, w: 15, depth: 0.55, rot: -6 },
-      { toy: 'pin', x: 76, y: 16, w: 11, depth: 0.3, rot: 8 },
+      { toy: 'phone', img: 'sparks-phone', x: 78, y: 40, w: 25, mw: 44, mx: 74, my: 25, depth: 0.8, rot: 12 },
+      { toy: 'trophy', img: 'sparks-trophy', x: 90, y: 80, w: 14, mw: 26, mx: 86, my: 88, depth: 0.5, rot: -8 },
+      { toy: 'guzheng', img: 'sparks-guzheng', x: 60, y: 90, w: 19, mw: 34, mx: 22, my: 92, depth: 1, rot: -14 },
+      { toy: 'bolt', img: 'sparks-bolt', x: 55, y: 21, w: 10, mw: 18, mx: 90, my: 8, depth: 0.3, rot: 18 },
     ],
   },
 ]
 
 export const HERO_PROPS: ToyProp[] = [
-  { toy: 'laptop', img: 'hero-laptop', imgW: 1200, imgH: 1191, imgSmW: 520, x: 70, y: 33, w: 18, mw: 44, mx: 70, my: 29, depth: 0.6, rot: -6 },
-  { toy: 'boba', img: 'hero-boba', imgW: 832, imgH: 1200, imgSmW: 361, x: 11, y: 33, w: 9, mw: 22, mx: 16, my: 26, depth: 0.9, rot: 10 },
-  { toy: 'keycap', img: 'hero-keycap', imgW: 1180, imgH: 1168, imgSmW: 520, x: 37, y: 26, w: 7.5, mw: 15, mx: 42, my: 22, depth: 0.35, rot: -14 },
+  { toy: 'laptop', img: 'hero-laptop', x: 70, y: 33, w: 18, mw: 44, mx: 70, my: 29, depth: 0.6, rot: -6 },
+  { toy: 'boba', img: 'hero-boba', x: 11, y: 33, w: 9, mw: 22, mx: 16, my: 26, depth: 0.9, rot: 10 },
+  { toy: 'keycap', img: 'hero-keycap', x: 37, y: 26, w: 7.5, mw: 15, mx: 42, my: 22, depth: 0.35, rot: -14 },
 ]
 
 export interface ProjectCard {
@@ -177,7 +173,7 @@ export interface ProjectCard {
   kicker: string
   blurb: string
   tags: string[]
-  toy: string
+  img: string
   bg: string
   ink: string
   links?: { href: string; label: string; aria: string }[]
@@ -191,7 +187,7 @@ export const PROJECTS: ProjectCard[] = [
     blurb:
       'JavaScript library for form validation. Custom rules, error handling, and inputs including checkboxes, radios and file uploads.',
     tags: ['TypeScript', 'npm', 'MIT'],
-    toy: 'form',
+    img: 'p-train',
     bg: '#F4EFE6',
     ink: '#141414',
     links: [
@@ -213,7 +209,7 @@ export const PROJECTS: ProjectCard[] = [
     kicker: 'Client · DEPT®',
     blurb: 'Client work through DEPT® in Mumbai.',
     tags: ['DEPT®', 'Client'],
-    toy: 'mono',
+    img: 'p-beaver',
     bg: '#FF8FB1',
     ink: '#141414',
   },
@@ -223,7 +219,7 @@ export const PROJECTS: ProjectCard[] = [
     kicker: 'Client · DEPT®',
     blurb: 'India First Life Insurance. Client work through DEPT®.',
     tags: ['Insurance', 'DEPT®'],
-    toy: 'mono',
+    img: 'p-fortune',
     bg: '#C8A8FF',
     ink: '#141414',
   },
@@ -233,7 +229,7 @@ export const PROJECTS: ProjectCard[] = [
     kicker: 'Client · DEPT®',
     blurb: 'Client work through DEPT® in Mumbai.',
     tags: ['DEPT®', 'Client'],
-    toy: 'mono',
+    img: 'p-rocket',
     bg: '#7CE0FF',
     ink: '#082028',
   },
@@ -243,7 +239,7 @@ export const PROJECTS: ProjectCard[] = [
     kicker: 'Freelance',
     blurb: 'Freelance client work.',
     tags: ['Freelance', 'Mumbai'],
-    toy: 'mono',
+    img: 'p-gong',
     bg: '#FFD23F',
     ink: '#141414',
   },

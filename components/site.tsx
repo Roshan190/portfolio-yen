@@ -1,8 +1,41 @@
 import type { CSSProperties } from 'react'
-import { GemSlot } from './gem-slot'
 import { Motion } from './motion'
-import { ToyArt } from './toys'
+import artMeta from '@/lib/art-meta.json'
 import { HEALTH, HERO_PROPS, JOBS, PROJECTS, SKILLS, profile, type Theme, type ToyProp } from '@/lib/content'
+
+function ToyImg({ name, sizes, lazy, className = 'prop__img' }: { name: string; sizes: string; lazy: boolean; className?: string }) {
+  const meta = artMeta[name as keyof typeof artMeta]
+  const base = `/portfolio-yen/img/${name}`
+  return (
+    <picture>
+      <source type="image/avif" srcSet={`${base}-sm.avif ${meta.smW}w, ${base}.avif ${meta.w}w`} sizes={sizes} />
+      <img
+        className={className}
+        src={`${base}.webp`}
+        srcSet={`${base}-sm.webp ${meta.smW}w, ${base}.webp ${meta.w}w`}
+        sizes={sizes}
+        alt=""
+        width={meta.w}
+        height={meta.h}
+        loading={lazy ? 'lazy' : 'eager'}
+        decoding="async"
+        draggable={false}
+      />
+    </picture>
+  )
+}
+
+function Words({ text }: { text: string }) {
+  return text.split(/(\s+)/).map((part, i) =>
+    /^\s+$/.test(part) ? (
+      <span key={i}>{part}</span>
+    ) : (
+      <span className="w" key={i}>
+        {part}
+      </span>
+    ),
+  )
+}
 
 function Chars({ text, staggerFrom }: { text: string; staggerFrom?: number }) {
   let n = 0
@@ -46,35 +79,12 @@ function propStyle(p: ToyProp, i: number): CSSProperties {
   }
 }
 
-function Prop({ p, i }: { p: ToyProp; i: number }) {
-  const base = '/portfolio-yen/img'
+function Prop({ p, i, eager = false }: { p: ToyProp; i: number; eager?: boolean }) {
   return (
-    <div
-      className="prop"
-      data-depth={p.depth}
-      data-rot={p.rot ?? 0}
-      style={{ ...propStyle(p, i), transform: p.img ? `rotate(${p.rot ?? 0}deg)` : undefined }}
-    >
+    <div className="prop" data-depth={p.depth} data-rot={p.rot ?? 0} style={{ ...propStyle(p, i), transform: `rotate(${p.rot ?? 0}deg)` }}>
       <div className="prop__c">
-        <div className="prop__in" style={p.img ? undefined : { rotate: `${p.rot ?? 0}deg` }}>
-          {p.img ? (
-            <img
-              className="prop__img"
-              src={`${base}/${p.img}.webp`}
-              srcSet={`${base}/${p.img}-sm.webp ${p.imgSmW}w, ${base}/${p.img}.webp ${p.imgW}w`}
-              sizes={`(max-width: 1100px) ${p.mw ?? p.w}vw, ${p.w}vw`}
-              alt=""
-              width={p.imgW}
-              height={p.imgH}
-              loading="lazy"
-              decoding="async"
-              draggable={false}
-            />
-          ) : p.toy === 'gem' ? (
-            <GemSlot />
-          ) : (
-            <ToyArt id={p.toy} />
-          )}
+        <div className="prop__in">
+          <ToyImg name={p.img} sizes={`(max-width: 1100px) ${p.mw ?? p.w}vw, ${p.w}vw`} lazy={!eager} />
         </div>
       </div>
     </div>
@@ -135,9 +145,9 @@ export function Site() {
             <div className="stage">
               <div className="pattern pattern--dots" aria-hidden="true" />
               <div className="props" aria-hidden="true">
-                {HERO_PROPS.map((p, i) => (
-                  <Prop key={p.toy} p={p} i={i} />
-                ))}
+                  {HERO_PROPS.map((p, i) => (
+                    <Prop key={p.toy} p={p} i={i} eager />
+                  ))}
               </div>
               <div className="hero__copy safe">
                 <div className="hero__top">
@@ -158,17 +168,7 @@ export function Site() {
                     <Chars text={profile.last} staggerFrom={profile.first.length} />
                     <span className="hero__duck" aria-hidden="true">
                       <span className="hero__duck-in">
-                        <img
-                          className="prop__img"
-                          src="/portfolio-yen/img/hero-duck.webp"
-                          srcSet="/portfolio-yen/img/hero-duck-sm.webp 450w, /portfolio-yen/img/hero-duck.webp 1037w"
-                          sizes="(max-width: 760px) 26vw, 13vw"
-                          alt=""
-                          width={1037}
-                          height={1200}
-                          decoding="async"
-                          draggable={false}
-                        />
+                        <ToyImg name="hero-duck" sizes="(max-width: 760px) 26vw, 13vw" lazy={false} />
                       </span>
                     </span>
                   </span>
@@ -242,7 +242,9 @@ export function Site() {
                         </span>
                       ))}
                     </h2>
-                    <p className="co__line">{job.line}</p>
+                    <p className="co__line">
+                      <Words text={job.line} />
+                    </p>
                     <ul className="co__stats" style={{ ['--n' as string]: job.stats.length }}>
                       {job.stats.map((stat) => (
                         <li className="stat" key={stat.text}>
@@ -298,7 +300,7 @@ export function Site() {
                       </h2>
                     </div>
                     <div className="projects__toy" aria-hidden="true">
-                      <ToyArt id="shield" />
+                      <ToyImg name="p-organ" sizes="(max-width: 760px) 28vw, 150px" lazy className="feature__img" />
                     </div>
                   </div>
                   <p className="projects__lede">{HEALTH.blurb}</p>
@@ -337,7 +339,7 @@ export function Site() {
                       data-tilt={i % 2 ? 1 : -1}
                     >
                       <div className="card__art" aria-hidden="true">
-                        <ToyArt id={project.toy} label={project.name} />
+                        <ToyImg name={project.img} sizes="(max-width: 760px) 70vw, 22vw" lazy className="card__pic" />
                       </div>
                       <div className="card__top">
                         <span>
@@ -401,10 +403,13 @@ export function Site() {
         <footer className="scene end" id="contact" data-year={year}>
           <div className="end__inner">
             <p className="eyebrow">That’s the scroll</p>
-            <h2 className="end__title">
-              <span>Find me</span>
-              <span>
-                online<i>.</i>
+            <h2 className="end__title" aria-label="Find me online.">
+              <span aria-hidden="true">
+                <Chars text="Find me" />
+              </span>
+              <span aria-hidden="true">
+                <Chars text="online" />
+                <i>.</i>
               </span>
             </h2>
             <p className="end__lede">

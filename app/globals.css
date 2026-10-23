@@ -58,9 +58,13 @@ html.lenis.lenis-stopped {
   overflow: visible;
 }
 
+html,
+body {
+  background: var(--cream);
+}
+
 body {
   margin: 0;
-  background: #141414;
   color: var(--ink);
   font-family: var(--display);
   font-size: 16px;
@@ -369,6 +373,27 @@ mark {
 
 .pattern--lines {
   background: repeating-linear-gradient(0deg, var(--pc) 0 1px, transparent 1px 42px);
+}
+
+.pattern--spot {
+  --pc: color-mix(in srgb, #0b5cff 55%, transparent);
+  background:
+    radial-gradient(circle at 72% 42%, rgb(11 92 255 / 0.3), transparent 42vmax),
+    radial-gradient(var(--pc) 1.4px, transparent 1.9px) 0 0 / 22px 22px;
+  animation: spot-drift 16s ease-in-out infinite alternate;
+}
+
+@keyframes spot-drift {
+  from {
+    background-position:
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      0 0,
+      22px 14px;
+  }
 }
 
 .props {
@@ -908,6 +933,11 @@ html.is-motion .projects__track {
   width: min(150px, 28vw);
 }
 
+.projects__toy img {
+  width: 100%;
+  height: auto;
+}
+
 .projects__title {
   margin: 0;
   font-size: clamp(64px, 8vw, 120px);
@@ -976,27 +1006,42 @@ html.is-motion .projects__track {
   --c-bg: #fff;
   --c-ink: #141414;
   flex: none;
-  width: clamp(270px, 24vw, 360px);
-  min-height: min(68vh, 540px);
+  position: relative;
+  width: clamp(280px, 25vw, 380px);
+  height: min(70vh, 580px);
   border-radius: 28px;
   background: var(--c-bg);
   color: var(--c-ink);
-  padding: 18px 18px 16px;
+  padding: 22px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  box-shadow: 0 24px 50px -28px rgb(0 0 0 / 0.65);
+  gap: 10px;
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.6);
+  transform-origin: 50% 100%;
 }
 
 .card__art {
-  height: 150px;
-  display: grid;
-  place-items: center;
+  position: relative;
+  flex: 1 1 0;
+  min-height: 0;
+  margin: -64px -6px 0;
+  transition:
+    scale 0.5s var(--ease-out),
+    rotate 0.5s var(--ease-out);
 }
 
-.card__art .toy {
-  width: min(150px, 70%);
-  animation: none;
+.card__art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 18px rgb(0 0 0 / 0.25));
+}
+
+.card:hover .card__art {
+  scale: 1.06;
+  rotate: -3deg;
 }
 
 .card__top,
@@ -1270,15 +1315,15 @@ html.is-motion .projects__track {
 
 @media (max-width: 760px), (orientation: portrait) and (max-width: 1100px) {
   .prop {
-    left: calc(var(--mx) * 1%);
-    top: calc(var(--my) * 1%);
-    width: calc(var(--mw) * 1vw);
+    left: calc(var(--mx, var(--x)) * 1%);
+    top: calc(var(--my, var(--y)) * 1%);
+    width: calc(var(--mw, var(--w)) * 1vw);
   }
 
   .co .props {
-    top: var(--hud-h);
+    top: calc(var(--hud-h) - 4px);
     bottom: auto;
-    height: max(120px, calc(var(--band, 38vh) - var(--hud-h)));
+    height: calc(var(--band, 45vh) - var(--hud-h) + 4px);
     overflow: hidden;
   }
 
@@ -1288,35 +1333,47 @@ html.is-motion .projects__track {
     width: var(--sw);
   }
 
+  .co .prop__img {
+    width: 100%;
+    height: auto;
+    max-height: calc(var(--bh) * (var(--band, 45vh) - var(--hud-h)));
+    object-fit: contain;
+  }
+
   .co .prop:nth-child(1) {
-    --sx: 72%;
-    --sy: 58%;
-    --sw: 42vw;
+    --sx: 70%;
+    --sy: 52%;
+    --sw: 50vw;
+    --bh: 0.9;
   }
 
   .co .prop:nth-child(2) {
-    --sx: 24%;
+    --sx: 22%;
     --sy: 62%;
-    --sw: 28vw;
+    --sw: 32vw;
+    --bh: 0.6;
   }
 
   .co .prop:nth-child(3) {
-    --sx: 48%;
-    --sy: 18%;
-    --sw: 18vw;
+    --sx: 43%;
+    --sy: 20%;
+    --sw: 20vw;
+    --bh: 0.34;
   }
 
   .co .prop:nth-child(4) {
-    --sx: 16%;
-    --sy: 16%;
+    --sx: 11%;
+    --sy: 20%;
     --sw: 16vw;
+    --bh: 0.3;
   }
 
   .hero__name {
     flex-direction: column;
     font-size: min(33vw, 21vh, calc((100vw - 2 * var(--pad)) / 3.72));
     line-height: 0.8;
-    margin: auto 0 4vh;
+    /* Keep the name up with the toys. auto was leaving a blank band above it. */
+    margin: 12vh 0 2vh;
   }
 
   .hero__word:last-child {
@@ -1330,7 +1387,8 @@ html.is-motion .projects__track {
   }
 
   .hero__copy {
-    padding-bottom: 82px;
+    justify-content: flex-start;
+    padding-bottom: 24px;
   }
 
   .hero__chips {
@@ -1416,7 +1474,12 @@ html.is-motion .projects__track {
 
   .card {
     width: 78vw;
-    min-height: 0;
+    height: min(64vh, 540px);
+    padding: 18px;
+  }
+
+  .card__art {
+    margin-top: -48px;
   }
 
   .end__grid {
@@ -1506,16 +1569,19 @@ html.is-motion .projects__track {
   }
 
   .card {
-    width: 240px;
-    min-height: 0;
+    width: 250px;
+    height: min(76vh, 300px);
+    padding: 14px;
+    gap: 6px;
   }
 
   .card__art {
-    height: 72px;
+    margin-top: -28px;
+    height: auto;
   }
 
   .card__blurb {
-    display: none;
+    font-size: 12.5px;
   }
 }
 
@@ -1526,6 +1592,10 @@ html.is-motion .projects__track {
 
   .hero .prop__in {
     animation: prop-pop 1.3s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  }
+
+  .hero .prop:nth-child(even) .prop__in {
+    animation-name: prop-pop-alt;
   }
 
   .hero .prop:nth-child(1) .prop__in {
@@ -1589,6 +1659,14 @@ html.is-motion .projects__track {
 @keyframes prop-pop {
   from {
     scale: 0;
+    rotate: -35deg;
+  }
+}
+
+@keyframes prop-pop-alt {
+  from {
+    scale: 0;
+    rotate: 35deg;
   }
 }
 
@@ -1633,7 +1711,8 @@ html.is-motion .projects__track {
   .projects__hint span,
   .rewind__scan::after,
   .hud__rew,
-  .rewind__rew {
+  .rewind__rew,
+  .pattern--spot {
     animation: none !important;
   }
 
