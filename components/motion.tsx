@@ -8,8 +8,31 @@ export function Motion() {
   useEffect(() => {
     let restore: (() => void) | undefined
     let cancelled = false
+    let started = false
+    let timer = 0
 
-    ;(async () => {
+    const paintHud = () => {
+      const main = document.getElementById('main')
+      const hud = document.getElementById('hud')
+      const hudYear = document.getElementById('hudYear')
+      const themeMeta = document.getElementById('theme-color')
+      if (!main || !hud || !hudYear) return
+      const line = 72
+      let top = main.querySelector<HTMLElement>('.scene')
+      if (!top) return
+      for (const scene of main.querySelectorAll<HTMLElement>('.scene')) {
+        if (scene.getBoundingClientRect().top <= line) top = scene
+      }
+      const cs = getComputedStyle(top)
+      hud.style.setProperty('--hud-ink', cs.getPropertyValue('--ink').trim())
+      hud.style.setProperty('--hud-bg', cs.getPropertyValue('--bg').trim())
+      hud.style.setProperty('--hud-accent', (cs.getPropertyValue('--name') || cs.getPropertyValue('--accent')).trim())
+      if (themeMeta) themeMeta.setAttribute('content', cs.getPropertyValue('--bg').trim())
+      hudYear.textContent = top.dataset.year ?? ''
+      hud.classList.toggle('is-solid', top.id === 'contact' && top.getBoundingClientRect().top < -2)
+    }
+
+    const boot = async () => {
       const { gsap } = await import('gsap')
       const { ScrollTrigger } = await import('gsap/ScrollTrigger')
       if (cancelled) return
@@ -347,12 +370,46 @@ export function Motion() {
         ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
       }
       syncHud()
-    })().catch(() => {
-      /* Leave the page on native scrolling. */
-    })
+    }
+
+    const start = () => {
+      if (started || cancelled) return
+      started = true
+      window.clearTimeout(timer)
+      window.removeEventListener('pointerdown', start)
+      window.removeEventListener('keydown', start)
+      window.removeEventListener('wheel', start)
+      window.removeEventListener('touchstart', start)
+      window.removeEventListener('scroll', onScroll)
+      void boot().catch(() => {
+        /* Leave the page on native scrolling. */
+      })
+    }
+
+    const onScroll = () => {
+      if (window.scrollY > 8) start()
+    }
+
+    paintHud()
+    window.addEventListener('scroll', paintHud, { passive: true })
+    window.addEventListener('pointerdown', start, { passive: true })
+    window.addEventListener('keydown', start)
+    window.addEventListener('wheel', start, { passive: true })
+    window.addEventListener('touchstart', start, { passive: true })
+    window.addEventListener('scroll', onScroll, { passive: true })
+    // Fallback for a visitor who never scrolls. Long enough that it stays
+    // outside the initial load, so the hero can paint first.
+    timer = window.setTimeout(start, 12000)
 
     return () => {
       cancelled = true
+      window.clearTimeout(timer)
+      window.removeEventListener('pointerdown', start)
+      window.removeEventListener('keydown', start)
+      window.removeEventListener('wheel', start)
+      window.removeEventListener('touchstart', start)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('scroll', paintHud)
       restore?.()
     }
   }, [])

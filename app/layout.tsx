@@ -23,6 +23,7 @@ const serif = Instrument_Serif({
 const mono = JetBrains_Mono({
   subsets: ['latin'],
   display: 'swap',
+  preload: false,
   variable: '--font-jetbrains',
 })
 
