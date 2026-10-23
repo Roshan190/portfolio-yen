@@ -17,6 +17,9 @@ const serif = Instrument_Serif({
   weight: '400',
   style: 'italic',
   display: 'swap',
+  // Only the "Based in Mumbai" phrase uses this face, and it sits behind the loader.
+  // Leave it out of the critical preload so the display font is not competing with it.
+  preload: false,
   variable: '--font-instrument',
 })
 

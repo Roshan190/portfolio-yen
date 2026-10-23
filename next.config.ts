@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
   images: { unoptimized: true },
   poweredByHeader: false,
   reactStrictMode: true,
+  experimental: {
+    // The stylesheet is render-blocking. Inlining it keeps the same rules
+    // and drops a round trip before first paint.
+    inlineCss: true,
+  },
 }
 
 export default nextConfig

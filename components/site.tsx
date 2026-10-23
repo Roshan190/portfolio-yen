@@ -4,7 +4,19 @@ import { Motion } from './motion'
 import artMeta from '@/lib/art-meta.json'
 import { HEALTH, HERO_PROPS, JOBS, PROJECTS, SKILLS, profile, type Theme, type ToyProp } from '@/lib/content'
 
-function ToyImg({ name, sizes, lazy, className = 'prop__img' }: { name: string; sizes: string; lazy: boolean; className?: string }) {
+function ToyImg({
+  name,
+  sizes,
+  lazy,
+  className = 'prop__img',
+  fetchPriority,
+}: {
+  name: string
+  sizes: string
+  lazy: boolean
+  className?: string
+  fetchPriority?: 'high' | 'low' | 'auto'
+}) {
   const meta = artMeta[name as keyof typeof artMeta]
   const base = `/portfolio-yen/img/${name}`
   return (
@@ -19,6 +31,7 @@ function ToyImg({ name, sizes, lazy, className = 'prop__img' }: { name: string; 
         width={meta.w}
         height={meta.h}
         loading={lazy ? 'lazy' : 'eager'}
+        fetchPriority={fetchPriority}
         decoding="async"
         draggable={false}
       />
@@ -89,7 +102,7 @@ function Prop({ p, i, eager = false }: { p: ToyProp; i: number; eager?: boolean 
     <div className="prop" data-depth={p.depth} data-rot={p.rot ?? 0} style={{ ...propStyle(p, i), transform: `rotate(${p.rot ?? 0}deg)` }}>
       <div className="prop__c">
         <div className="prop__in">
-          <ToyImg name={p.img} sizes={`(max-width: 1100px) ${p.mw ?? p.w}vw, ${p.w}vw`} lazy={!eager} />
+          <ToyImg name={p.img} sizes={`(max-width: 1100px) ${p.mw ?? p.w}vw, ${p.w}vw`} lazy={!eager} fetchPriority={eager ? 'low' : undefined} />
         </div>
       </div>
     </div>
@@ -177,7 +190,7 @@ export function Site() {
                     <Chars text={profile.last} staggerFrom={profile.first.length} />
                     <span className="hero__duck" aria-hidden="true">
                       <span className="hero__duck-in">
-                        <ToyImg name="hero-duck" sizes="(max-width: 760px) 26vw, 13vw" lazy={false} />
+                        <ToyImg name="hero-duck" sizes="(max-width: 760px) 26vw, 13vw" lazy={false} fetchPriority="high" />
                       </span>
                     </span>
                   </span>
