@@ -81,7 +81,12 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <meta id="theme-color" name="theme-color" content="#F4EFE6" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <noscript>
+          <style>{'.loader{display:none}'}</style>
+        </noscript>
+      </body>
     </html>
   )
 }

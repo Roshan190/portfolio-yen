@@ -73,6 +73,78 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+body.is-loading {
+  overflow: hidden;
+}
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--cream);
+  color: var(--ink);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 18px;
+  text-align: center;
+  padding: 24px;
+}
+
+.loader__mark {
+  margin: 0;
+  font-size: clamp(96px, 22vw, 240px);
+  font-weight: 800;
+  font-stretch: 75%;
+  line-height: 0.8;
+  letter-spacing: -0.03em;
+}
+
+.loader__mark i {
+  font-style: normal;
+  font-size: 0.22em;
+  vertical-align: top;
+  color: var(--tomato);
+}
+
+.loader__line {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 13px;
+  min-height: 1.5em;
+}
+
+.loader__pct {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+html.skip-loader .loader,
+html[data-loader='skip'] .loader,
+html[data-loader='done'] .loader {
+  display: none;
+}
+
+html[data-loader='leaving'] .loader,
+html[data-loader='done'] .loader {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .loader.is-leave,
+  html[data-loader='leaving'] .loader {
+    animation: loader-leave 1.05s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+  }
+}
+
+@keyframes loader-leave {
+  to {
+    transform: translateY(-110%);
+  }
+}
+
 img,
 svg {
   display: block;
@@ -375,24 +447,46 @@ mark {
   background: repeating-linear-gradient(0deg, var(--pc) 0 1px, transparent 1px 42px);
 }
 
+@property --spx {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 72%;
+}
+
+@property --spy {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 42%;
+}
+
 .pattern--spot {
   --pc: color-mix(in srgb, #0b5cff 55%, transparent);
   background:
-    radial-gradient(circle at 72% 42%, rgb(11 92 255 / 0.3), transparent 42vmax),
+    radial-gradient(circle at var(--spx) var(--spy), rgb(11 92 255 / 0.3), transparent 42vmax),
     radial-gradient(var(--pc) 1.4px, transparent 1.9px) 0 0 / 22px 22px;
+  mask-image: radial-gradient(circle 48vmax at var(--spx) var(--spy), #000, rgb(0 0 0 / 0.18) 62%, transparent);
   animation: spot-drift 16s ease-in-out infinite alternate;
+  transition:
+    --spx 0.9s var(--ease-out),
+    --spy 0.9s var(--ease-out);
+}
+
+.has-pointer .pattern--spot {
+  animation: none;
 }
 
 @keyframes spot-drift {
-  from {
-    background-position:
-      0 0,
-      0 0;
+  0% {
+    --spx: 78%;
+    --spy: 30%;
   }
-  to {
-    background-position:
-      0 0,
-      22px 14px;
+  50% {
+    --spx: 30%;
+    --spy: 60%;
+  }
+  100% {
+    --spx: 64%;
+    --spy: 78%;
   }
 }
 
@@ -495,8 +589,9 @@ mark {
   flex-wrap: wrap;
   justify-content: space-between;
   column-gap: 0.12em;
-  /* 27vw / 43vh match the original. The third term keeps SHIKHARE inside the pad. */
-  font-size: min(27vw, 43vh, calc((100vw - 2 * var(--pad)) / 3.72));
+  /* 27vw / 43vh match the original. The width term keeps SHIKHARE inside the pad.
+     The vh term keeps the two lines in the lower half so the toys stay above them. */
+  font-size: min(27vw, 43vh, 24vh, calc((100vw - 2 * var(--pad)) / 3.72));
   font-weight: 800;
   font-stretch: 75%;
   line-height: 0.8;
@@ -865,6 +960,8 @@ mark {
   --accent: #ffd23f;
   --name: #ffd23f;
   height: auto;
+  /* Reserve the track before JS measures it, so the contact card cannot cover the rewind on reload. */
+  min-height: calc(var(--vh) * 2);
 }
 
 .projects .sticky {
@@ -1214,7 +1311,7 @@ html.is-motion .projects__track {
   text-transform: uppercase;
 }
 
-.end__title span {
+.end__title > span {
   display: block;
 }
 
@@ -1372,8 +1469,7 @@ html.is-motion .projects__track {
     flex-direction: column;
     font-size: min(33vw, 21vh, calc((100vw - 2 * var(--pad)) / 3.72));
     line-height: 0.8;
-    /* Keep the name up with the toys. auto was leaving a blank band above it. */
-    margin: 12vh 0 2vh;
+    margin: auto 0 4vh;
   }
 
   .hero__word:last-child {
@@ -1387,8 +1483,7 @@ html.is-motion .projects__track {
   }
 
   .hero__copy {
-    justify-content: flex-start;
-    padding-bottom: 24px;
+    padding-bottom: 28px;
   }
 
   .hero__chips {
@@ -1587,7 +1682,7 @@ html.is-motion .projects__track {
 
 @media (prefers-reduced-motion: no-preference) {
   .hero__name .char {
-    animation: name-rise 1.2s cubic-bezier(0.19, 1, 0.22, 1) both;
+    animation: name-rise 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.7s both;
   }
 
   .hero .prop__in {
@@ -1714,6 +1809,10 @@ html.is-motion .projects__track {
   .rewind__rew,
   .pattern--spot {
     animation: none !important;
+  }
+
+  .loader {
+    display: none !important;
   }
 
   .hero,

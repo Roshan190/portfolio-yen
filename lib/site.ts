@@ -3,7 +3,7 @@ import { HEALTH, profile, SITE } from './content'
 export const title = `${profile.name} · ${profile.headline}`
 
 export const description =
-  'Roshan Shikhare is a senior frontend and fullstack engineer in Mumbai. Five-plus years with React, Next.js and Node.js across Bajaj Finserv, DEPT® and Tekno Point. Featured work: HealthShield.'
+  'Roshan Shikhare is a senior frontend and fullstack engineer in Mumbai. 6 years with React, Next.js and Node.js across Bajaj Finserv, DEPT® and Tekno Point. Featured work: HealthShield.'
 
 export const jsonLd = {
   '@context': 'https://schema.org',

@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { Loader } from './loader'
 import { Motion } from './motion'
 import artMeta from '@/lib/art-meta.json'
 import { HEALTH, HERO_PROPS, JOBS, PROJECTS, SKILLS, profile, type Theme, type ToyProp } from '@/lib/content'
@@ -111,6 +112,7 @@ const year = new Date().getFullYear()
 export function Site() {
   return (
     <>
+      <Loader />
       <a className="skip" href="#bajaj">
         Skip to work
       </a>
@@ -175,12 +177,12 @@ export function Site() {
                 </h1>
                 <div className="hero__row">
                   <p className="hero__lede">
-                    Senior frontend and fullstack engineer. Five-plus years on <mark>enterprise and product</mark> web
+                    Senior frontend and fullstack engineer. 6 years on <mark>enterprise and product</mark> web
                     applications. React, Next.js and Node.js. <em>Based in Mumbai.</em>
                   </p>
                   <ul className="hero__chips" aria-label="At a glance">
                     <li>
-                      <b>5+</b>
+                      <b>6</b>
                       <span>years</span>
                     </li>
                     <li>
@@ -275,7 +277,7 @@ export function Site() {
               <div className="rewind__copy safe">
                 <p className="eyebrow">Back to now</p>
                 <p className="rewind__year" aria-hidden="true">
-                  <span id="rewindYear">{year}</span>
+                  <span id="rewindYear">2021</span>
                 </p>
                 <p className="rewind__line">
                   Three jobs, newest first, from 2021 to now. The tape runs forward for selected work.

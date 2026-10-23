@@ -329,12 +329,19 @@ export function Motion() {
           }
 
           if (window.matchMedia('(pointer: fine)').matches) {
+            document.documentElement.classList.add('has-pointer')
             const movers = new Map<HTMLElement, { x: (v: number) => void; y: (v: number) => void; d: number }>()
             const onMove = (event: PointerEvent) => {
               const line = 80
               let scene = scenes[0]
               if (!scene) return
               for (const item of scenes) if (item.getBoundingClientRect().top <= line) scene = item
+              const spot = scene.querySelector<HTMLElement>('.pattern--spot')
+              if (spot) {
+                const rect = spot.getBoundingClientRect()
+                spot.style.setProperty('--spx', `${(((event.clientX - rect.left) / rect.width) * 100).toFixed(1)}%`)
+                spot.style.setProperty('--spy', `${(((event.clientY - rect.top) / rect.height) * 100).toFixed(1)}%`)
+              }
               const nx = event.clientX / window.innerWidth - 0.5
               const ny = event.clientY / window.innerHeight - 0.5
               scene.querySelectorAll<HTMLElement>('.prop').forEach((prop) => {
@@ -390,7 +397,7 @@ export function Motion() {
           if (ticker) gsap.ticker.remove(ticker)
           lenis?.destroy()
           ctx.revert()
-          root.classList.remove('is-motion')
+          root.classList.remove('is-motion', 'has-pointer')
           const projects = main.querySelector<HTMLElement>('.projects')
           if (projects) projects.style.height = ''
         }
