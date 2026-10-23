@@ -147,6 +147,7 @@ export function Motion() {
             if (stage) parallax(tl, stage, 1, true)
             if (words[0]) tl.to(words[0], { xPercent: -6, duration: 1 }, 0)
             if (words[1]) tl.to(words[1], { xPercent: 6, duration: 1 }, 0)
+            tl.to('.hero__duck', { y: () => -H() * 0.5, rotation: 50, duration: 1 }, 0)
             tl.to('.hero__mark', { y: () => -H() * 0.22, rotation: 16, duration: 1 }, 0)
             tl.to(['.hero__row', '.hero__eyebrow', '.hero__cue'], { y: () => -H() * 0.08, opacity: 0, duration: 0.5 }, 0)
             if (stage) tl.fromTo(stage, { scale: 1, '--dim': 0 }, { scale: 0.92, '--dim': 0.55, duration: 1, ease: 'power1.in' }, 0)

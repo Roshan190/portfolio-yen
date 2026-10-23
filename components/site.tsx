@@ -4,18 +4,20 @@ import { Motion } from './motion'
 import { ToyArt } from './toys'
 import { HEALTH, HERO_PROPS, JOBS, PROJECTS, SKILLS, profile, type Theme, type ToyProp } from '@/lib/content'
 
-function Chars({ text }: { text: string }) {
+function Chars({ text, staggerFrom }: { text: string; staggerFrom?: number }) {
+  let n = 0
   return (
     <>
-      {Array.from(text).map((c, i) =>
-        c === ' ' ? (
-          <span key={i}> </span>
-        ) : (
-          <span className="char" key={`${c}-${i}`}>
+      {Array.from(text).map((c, i) => {
+        if (c === ' ') return <span key={i}> </span>
+        const delay = staggerFrom === undefined ? undefined : (staggerFrom + n) * 0.05
+        n += 1
+        return (
+          <span className="char" style={delay === undefined ? undefined : { animationDelay: `${delay}s` }} key={`${c}-${i}`}>
             {c}
           </span>
-        ),
-      )}
+        )
+      })}
     </>
   )
 }
@@ -127,10 +129,25 @@ export function Site() {
                 </div>
                 <h1 className="hero__name" aria-label={profile.name}>
                   <span className="hero__word" aria-hidden="true">
-                    <Chars text={profile.first} />
+                    <Chars text={profile.first} staggerFrom={0} />
                   </span>
                   <span className="hero__word" aria-hidden="true">
-                    <Chars text={profile.last} />
+                    <Chars text={profile.last} staggerFrom={profile.first.length} />
+                    <span className="hero__duck" aria-hidden="true">
+                      <span className="hero__duck-in">
+                        <img
+                          className="prop__img"
+                          src="/portfolio-yen/img/hero-duck.webp"
+                          srcSet="/portfolio-yen/img/hero-duck-sm.webp 450w, /portfolio-yen/img/hero-duck.webp 1037w"
+                          sizes="(max-width: 760px) 26vw, 13vw"
+                          alt=""
+                          width={1037}
+                          height={1200}
+                          decoding="async"
+                          draggable={false}
+                        />
+                      </span>
+                    </span>
                     <span className="hero__mark">
                       <ToyArt id="rs" label="RS" />
                     </span>
