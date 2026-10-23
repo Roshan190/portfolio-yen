@@ -162,9 +162,9 @@ export const JOBS: Job[] = [
 ]
 
 export const HERO_PROPS: ToyProp[] = [
-  { toy: 'laptop', img: 'hero-laptop', x: 78, y: 16, w: 16, mw: 44, mx: 70, my: 22, depth: 0.6, rot: -6 },
-  { toy: 'boba', img: 'hero-boba', x: 12, y: 18, w: 9, mw: 22, mx: 16, my: 20, depth: 0.9, rot: 10 },
-  { toy: 'keycap', img: 'hero-keycap', x: 42, y: 13, w: 7, mw: 15, mx: 42, my: 16, depth: 0.35, rot: -14 },
+  { toy: 'laptop', img: 'hero-laptop', x: 86, y: 30, w: 12.5, mw: 36, mx: 78, my: 40, depth: 0.6, rot: -6 },
+  { toy: 'boba', img: 'hero-boba', x: 14, y: 58, w: 11, mw: 24, mx: 16, my: 52, depth: 0.9, rot: 10 },
+  { toy: 'keycap', img: 'hero-keycap', x: 48, y: 22, w: 7, mw: 14, mx: 44, my: 34, depth: 0.35, rot: -14 },
 ]
 
 export interface ProjectCard {

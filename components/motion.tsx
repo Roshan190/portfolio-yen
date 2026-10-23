@@ -275,17 +275,27 @@ export function Motion() {
               })
             }
 
-            const slide = gsap.to(track, {
-              x: () => -dist(),
-              ease: 'none',
-              scrollTrigger: {
-                trigger: projects,
-                start: 'top top',
-                end: () => `+=${dist()}`,
-                scrub: SCRUB,
-                invalidateOnRefresh: true,
+            // The pre-motion script parks the track at the right scroll offset.
+            // A plain to() would treat that offset as the tween's start, so a
+            // mid-page reload then slides the cards again. fromTo keeps 0 as
+            // the start and the scroll progress lands on the same offset.
+            track.style.transform = ''
+            const slide = gsap.fromTo(
+              track,
+              { x: 0 },
+              {
+                x: () => -dist(),
+                ease: 'none',
+                immediateRender: false,
+                scrollTrigger: {
+                  trigger: projects,
+                  start: 'top top',
+                  end: () => `+=${dist()}`,
+                  scrub: SCRUB,
+                  invalidateOnRefresh: true,
+                },
               },
-            })
+            )
 
             if (stage && end) {
               gsap

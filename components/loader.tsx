@@ -25,11 +25,17 @@ const BOOT = `
     if (el) el.style.setProperty('display', 'none', 'important')
   }
   var phase = (reduce() || seen()) ? 'skip' : 'run'
+  function markSkip() {
+    var el = curtain()
+    if (el) el.classList.add('is-skip')
+  }
   if (phase === 'skip') {
     hide()
+    markSkip()
     var skips = 0
     var keep = setInterval(function () {
       hide()
+      markSkip()
       if (++skips > 24) clearInterval(keep)
     }, 80)
     return

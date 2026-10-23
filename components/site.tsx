@@ -47,7 +47,11 @@ function Chars({ text, staggerFrom }: { text: string; staggerFrom?: number }) {
         const delay = staggerFrom === undefined ? undefined : (staggerFrom + n) * 0.05
         n += 1
         return (
-          <span className="char" style={delay === undefined ? undefined : { animationDelay: `${delay}s` }} key={`${c}-${i}`}>
+          <span
+            className="char"
+            style={delay === undefined ? undefined : ({ ['--d' as string]: `${delay}s` } as CSSProperties)}
+            key={`${c}-${i}`}
+          >
             {c}
           </span>
         )
@@ -131,6 +135,9 @@ export function Site() {
           <a className="hud__link hud__link--desk" href="#projects" data-goto="#projects">
             Projects
           </a>
+          <a className="hud__link" href="/portfolio-yen/Roshan_Shikhare_Resume.pdf" target="_blank" rel="noopener">
+            Résumé
+          </a>
           <a className="hud__cta" href="#contact" data-goto="#contact">
             Links
           </a>
@@ -177,12 +184,12 @@ export function Site() {
                 </h1>
                 <div className="hero__row">
                   <p className="hero__lede">
-                    Senior frontend and fullstack engineer. 6 years on <mark>enterprise and product</mark> web
+                    Senior frontend and fullstack engineer. 5+ years on <mark>enterprise and product</mark> web
                     applications. React, Next.js and Node.js. <em>Based in Mumbai.</em>
                   </p>
                   <ul className="hero__chips" aria-label="At a glance">
                     <li>
-                      <b>6</b>
+                      <b>5+</b>
                       <span>years</span>
                     </li>
                     <li>
@@ -401,6 +408,11 @@ export function Site() {
             </div>
           </div>
         </section>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var root=document.documentElement,projects=document.getElementById('projects'),track=document.getElementById('track');if(!projects||!track)return;function place(){if(root.classList.contains('is-motion')){removeEventListener('scroll',place);return}var dist=Math.max(0,track.scrollWidth-innerWidth),start=projects.getBoundingClientRect().top+scrollY,p=dist?Math.min(1,Math.max(0,(scrollY-start)/dist)):0;projects.style.height=Math.round(innerHeight*2.05+dist)+'px';track.style.transform='translate3d('+(-p*dist)+'px,0,0)'}place();addEventListener('scroll',place,{passive:true});addEventListener('pageshow',place);requestAnimationFrame(place);setTimeout(place,160)})()`,
+          }}
+        />
 
         <footer className="scene end" id="contact" data-year={year}>
           <div className="end__inner">
