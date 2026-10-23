@@ -78,6 +78,12 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html lang="en" className={`${display.variable} ${serif.variable} ${mono.variable}`}>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{if(!(matchMedia('(prefers-reduced-motion: reduce)').matches||sessionStorage.getItem('rs-seen')==='1'))return;var s=document.createElement('style');s.setAttribute('data-loader-skip','');s.textContent='#loader{display:none!important}';document.head.appendChild(s)}catch(e){}})();",
+          }}
+        />
         <meta id="theme-color" name="theme-color" content="#F4EFE6" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
       </head>

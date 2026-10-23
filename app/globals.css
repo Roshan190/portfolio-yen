@@ -1575,6 +1575,22 @@ html.is-motion .projects__track {
   }
 }
 
+/* The year sits in the middle column. With Résumé in the nav it meets Work
+   at 320–414. Drop the year and let the nav sit on the right. */
+@media (max-width: 480px) {
+  .hud {
+    grid-template-columns: 1fr auto;
+  }
+
+  .hud__year {
+    display: none;
+  }
+
+  .hud__nav {
+    gap: 14px;
+  }
+}
+
 @media (max-width: 760px) and (max-height: 700px) {
   .co .props {
     height: max(72px, calc(var(--band, 38vh) - var(--hud-h) - 12px));
