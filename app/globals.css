@@ -1576,8 +1576,8 @@ html.is-motion .projects__track {
 }
 
 /* The year sits in the middle column. With Résumé in the nav it meets Work
-   at 320–414. Drop the year and let the nav sit on the right. */
-@media (max-width: 480px) {
+   until the viewport is wide enough for a 14px gap, which is about 540px. */
+@media (max-width: 540px) {
   .hud {
     grid-template-columns: 1fr auto;
   }
