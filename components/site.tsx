@@ -47,11 +47,34 @@ function propStyle(p: ToyProp, i: number): CSSProperties {
 }
 
 function Prop({ p, i }: { p: ToyProp; i: number }) {
+  const base = '/portfolio-yen/img'
   return (
-    <div className="prop" data-depth={p.depth} data-rot={p.rot ?? 0} style={propStyle(p, i)}>
+    <div
+      className="prop"
+      data-depth={p.depth}
+      data-rot={p.rot ?? 0}
+      style={{ ...propStyle(p, i), transform: p.img ? `rotate(${p.rot ?? 0}deg)` : undefined }}
+    >
       <div className="prop__c">
-        <div className="prop__in" style={{ rotate: `${p.rot ?? 0}deg` }}>
-          {p.toy === 'gem' ? <GemSlot /> : <ToyArt id={p.toy} />}
+        <div className="prop__in" style={p.img ? undefined : { rotate: `${p.rot ?? 0}deg` }}>
+          {p.img ? (
+            <img
+              className="prop__img"
+              src={`${base}/${p.img}.webp`}
+              srcSet={`${base}/${p.img}-sm.webp ${p.imgSmW}w, ${base}/${p.img}.webp ${p.imgW}w`}
+              sizes={`(max-width: 1100px) ${p.mw ?? p.w}vw, ${p.w}vw`}
+              alt=""
+              width={p.imgW}
+              height={p.imgH}
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+            />
+          ) : p.toy === 'gem' ? (
+            <GemSlot />
+          ) : (
+            <ToyArt id={p.toy} />
+          )}
         </div>
       </div>
     </div>
@@ -147,9 +170,6 @@ export function Site() {
                           draggable={false}
                         />
                       </span>
-                    </span>
-                    <span className="hero__mark">
-                      <ToyArt id="rs" label="RS" />
                     </span>
                   </span>
                 </h1>

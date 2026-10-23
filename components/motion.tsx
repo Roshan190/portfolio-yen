@@ -121,14 +121,15 @@ export function Motion() {
 
         const ctx = gsap.context(() => {
           const parallax = (tl: gsap.core.Timeline, stage: Element, span: number, from0 = false) => {
-            const amp = () => (narrow() ? 0.08 : 0.22)
+            const amp = () => (narrow() ? (from0 ? 0.1 : 0.08) : from0 ? 0.3 : 0.22)
+            const swing = from0 ? 10 : 8
             stage.querySelectorAll<HTMLElement>('.prop').forEach((prop) => {
               const depth = Number(prop.dataset.depth) || 0.4
               const rot = Number(prop.dataset.rot) || 0
               tl.fromTo(
                 prop,
-                { y: () => (from0 ? 0 : H() * amp() * depth), rotation: from0 ? rot : rot - 8 * depth },
-                { y: () => -H() * (from0 ? 0.4 : amp()) * depth, rotation: rot + 8 * depth, duration: span, ease: 'none' },
+                { y: () => (from0 ? 0 : H() * amp() * depth), rotation: from0 ? rot : rot - swing * depth },
+                { y: () => -H() * (from0 ? 0.55 : amp()) * depth, rotation: rot + swing * depth, duration: span, ease: 'none' },
                 0,
               )
             })
@@ -145,12 +146,11 @@ export function Motion() {
               scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom bottom', scrub: SCRUB, invalidateOnRefresh: true },
             })
             if (stage) parallax(tl, stage, 1, true)
-            if (words[0]) tl.to(words[0], { xPercent: -6, duration: 1 }, 0)
-            if (words[1]) tl.to(words[1], { xPercent: 6, duration: 1 }, 0)
+            if (words[0]) tl.to(words[0], { xPercent: -28, duration: 1 }, 0)
+            if (words[1]) tl.to(words[1], { xPercent: 28, duration: 1 }, 0)
             tl.to('.hero__duck', { y: () => -H() * 0.5, rotation: 50, duration: 1 }, 0)
-            tl.to('.hero__mark', { y: () => -H() * 0.22, rotation: 16, duration: 1 }, 0)
-            tl.to(['.hero__row', '.hero__eyebrow', '.hero__cue'], { y: () => -H() * 0.08, opacity: 0, duration: 0.5 }, 0)
-            if (stage) tl.fromTo(stage, { scale: 1, '--dim': 0 }, { scale: 0.92, '--dim': 0.55, duration: 1, ease: 'power1.in' }, 0)
+            tl.to(['.hero__row', '.hero__eyebrow', '.hero__cue'], { y: () => -H() * 0.12, opacity: 0, duration: 0.5 }, 0)
+            if (stage) tl.fromTo(stage, { scale: 1, '--dim': 0 }, { scale: 0.9, '--dim': 0.62, duration: 1, ease: 'power1.in' }, 0)
           }
 
           const sceneTimeline = (section: Element) =>

@@ -465,39 +465,34 @@ mark {
 }
 
 .hero__name {
-  margin: auto 0 4vh;
+  margin: auto 0 5vh;
   display: flex;
-  flex-direction: column;
-  font-size: min(15.6vw, 22vh, 250px);
+  flex-wrap: wrap;
+  justify-content: space-between;
+  column-gap: 0.12em;
+  /* 27vw / 43vh match the original. The third term keeps SHIKHARE inside the pad. */
+  font-size: min(27vw, 43vh, calc((100vw - 2 * var(--pad)) / 3.72));
   font-weight: 800;
   font-stretch: 75%;
-  line-height: 0.78;
-  letter-spacing: -0.03em;
+  line-height: 0.8;
+  letter-spacing: -0.015em;
   text-transform: uppercase;
+  white-space: nowrap;
+  padding-top: 0.06em;
 }
 
 .hero__word {
   position: relative;
-  display: block;
+  display: inline-flex;
   width: max-content;
-  max-width: 100%;
 }
 
 .hero__word:last-child {
-  align-self: flex-end;
-  padding-right: 0.38em;
+  margin-left: auto;
 }
 
 .char {
   display: inline-block;
-}
-
-.hero__mark {
-  position: absolute;
-  right: 0.62em;
-  top: -0.08em;
-  width: 0.32em;
-  pointer-events: none;
 }
 
 /* Rubber duck from the original template, perched on the last letter. */
@@ -521,15 +516,18 @@ mark {
   filter: drop-shadow(0 16px 14px rgb(0 0 0 / 0.16));
 }
 
-.hero__mark .toy {
-  animation-duration: 4.8s;
+.prop__img {
+  width: 100%;
+  height: auto;
+  animation: bob var(--dur, 6s) ease-in-out var(--delay, 0s) infinite;
+  filter: drop-shadow(0 18px 22px rgb(0 0 0 / 0.16));
 }
 
 .hero__row {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 28px;
+  gap: 32px;
 }
 
 .hero__lede {
@@ -1315,14 +1313,24 @@ html.is-motion .projects__track {
   }
 
   .hero__name {
-    font-size: min(16.8vw, 12.5vh);
-    margin-bottom: 2vh;
+    flex-direction: column;
+    font-size: min(33vw, 21vh, calc((100vw - 2 * var(--pad)) / 3.72));
+    line-height: 0.8;
+    margin: auto 0 4vh;
+  }
+
+  .hero__word:last-child {
+    align-self: flex-end;
   }
 
   .hero__row {
     flex-direction: column;
     align-items: stretch;
-    gap: 14px;
+    gap: 16px;
+  }
+
+  .hero__copy {
+    padding-bottom: 82px;
   }
 
   .hero__chips {
@@ -1619,6 +1627,7 @@ html.is-motion .projects__track {
 
 @media (prefers-reduced-motion: reduce) {
   .toy,
+  .prop__img,
   .hero__cue span,
   .hero__duck .prop__img,
   .projects__hint span,

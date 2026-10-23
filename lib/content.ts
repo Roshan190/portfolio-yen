@@ -36,6 +36,11 @@ export interface ToyProp {
   mw?: number
   mx?: number
   my?: number
+  /** Original template artwork, when this toy is a photo rather than an SVG. */
+  img?: string
+  imgW?: number
+  imgH?: number
+  imgSmW?: number
 }
 
 export interface Job {
@@ -161,9 +166,9 @@ export const JOBS: Job[] = [
 ]
 
 export const HERO_PROPS: ToyProp[] = [
-  { toy: 'gem', x: 78, y: 24, w: 15, mw: 32, mx: 78, my: 18, depth: 0.55, rot: -8 },
-  { toy: 'chai', x: 11, y: 30, w: 8.5, mw: 18, mx: 14, my: 18, depth: 0.9, rot: 8 },
-  { toy: 'keycap', x: 40, y: 16, w: 7, mw: 14, mx: 46, my: 12, depth: 0.32, rot: -14 },
+  { toy: 'laptop', img: 'hero-laptop', imgW: 1200, imgH: 1191, imgSmW: 520, x: 70, y: 33, w: 18, mw: 44, mx: 70, my: 29, depth: 0.6, rot: -6 },
+  { toy: 'boba', img: 'hero-boba', imgW: 832, imgH: 1200, imgSmW: 361, x: 11, y: 33, w: 9, mw: 22, mx: 16, my: 26, depth: 0.9, rot: 10 },
+  { toy: 'keycap', img: 'hero-keycap', imgW: 1180, imgH: 1168, imgSmW: 520, x: 37, y: 26, w: 7.5, mw: 15, mx: 42, my: 22, depth: 0.35, rot: -14 },
 ]
 
 export interface ProjectCard {
